@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="search-card">
+    <form action="/packages" method="get" class="search-form" autocomplete="off">
+        <div class="search-row">
+            <div class="search-field" style="position:relative;">
+                <label for="from_city"><span style="margin-right:6px;">🏙️</span>From City</label>
+                <input class="form-control" name="from_city" id="from_city" placeholder="e.g. New Delhi" required autocomplete="off">
+                <div id="city-dropdown" class="city-dropdown" style="display:none;">
+                    <div class="city-dropdown-search">
+                        <input type="text" id="city-search" class="form-control" placeholder="Search city...">
+                    </div>
+                    <div class="city-dropdown-location" id="use-location" style="cursor:pointer;">
+                        <span style="color:#0077ff; margin-right:6px;">&#9679;</span> Use Current Location
+                    </div>
+                    <div class="city-dropdown-divider"></div>
+                    <div class="city-dropdown-label">TOP SEARCHES</div>
+                    <div class="city-dropdown-list" id="city-list">
+                        <!-- Cities will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+            <div class="search-field" style="position:relative;">
+                <label for="destination"><span style="margin-right:6px;">🌴</span>To City/Category</label>
+                <input class="form-control" name="destination" id="destination" placeholder="e.g. Goa" required>
+            </div>
+            <div class="search-field">
+                <label for="departure"><span style="margin-right:6px;">📅</span>Departure Date</label>
+                <input class="form-control" name="departure" id="departure" type="date">
+            </div>
+<div class="search-field" style="position:relative;">
+    <label for="guests"><span style="margin-right:6px;">👥</span>Rooms & Guests</label>
+    <input class="form-control" name="guests" id="guests" placeholder="e.g. 2 Adults, 1 Room" readonly style="background:#fff;cursor:pointer;">
+    <div id="guests-dropdown" class="guests-dropdown" style="display:none;">
+        <div class="guests-dropdown-header">
+            <span id="guests-warning" class="guests-warning" style="display:none;"></span>
+        </div>
+        <div id="rooms-list">
+            <!-- Rooms will be rendered by JS -->
+        </div>
+        <div style="padding:16px 0 0 0; text-align:center;">
+            <button type="button" id="add-room-btn" class="add-room-btn">ADD ANOTHER ROOM +</button>
+            <button type="button" id="apply-guests-btn" class="apply-guests-btn">APPLY</button>
+        </div>
+    </div>
+</div>
+            <div class="search-field">
+                <label for="type"><span style="margin-right:6px;">🎒</span>Package Type</label>
+                <select class="form-control" name="type" id="type">
+                    <option value="">Select Type</option>
+                    <option>Family</option>
+                    <option>Honeymoon</option>
+                    <option>Adventure</option>
+                    <option>Wildlife</option>
+                </select>
+            </div>
+            <div class="search-field">
+                <label for="filters"><span style="margin-right:6px;">⚙️</span>Filters (Optional)</label>
+                <input class="form-control" name="filters" id="filters" placeholder="e.g. Beach, Resort">
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:24px;">
+            <button class="btn btn-primary search-btn" type="submit">SEARCH</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="booking-card">
+    <h2>
+        <span style="vertical-align: middle; margin-right: 8px;">
+            <svg width="28" height="28" fill="#0077ff" viewBox="0 0 24 24" style="vertical-align: middle;">
+                <path d="M12 2C7.03 2 2.73 6.11 2.05 11H4.07C4.8 7.16 8.08 4.25 12 4.25C15.92 4.25 19.2 7.16 19.93 11H21.95C21.27 6.11 16.97 2 12 2ZM12 6.25C8.97 6.25 6.5 8.72 6.5 11.75C6.5 14.78 8.97 17.25 12 17.25C15.03 17.25 17.5 14.78 17.5 11.75C17.5 8.72 15.03 6.25 12 6.25ZM12 15.25C9.93 15.25 8.25 13.57 8.25 11.5C8.25 9.43 9.93 7.75 12 7.75C14.07 7.75 15.75 9.43 15.75 11.5C15.75 13.57 14.07 15.25 12 15.25Z"/>
+            </svg>
+        </span>
+        Booking: {{ package.name }}
+    </h2>
+    <form method="post">
+        <input class="form-control mb-2" name="name" placeholder="Name" required>
+        <input class="form-control mb-2" name="email" placeholder="Email" required>
+        <input class="form-control mb-2" name="phone" placeholder="Phone" required>
+        <input class="form-control mb-2" name="travellers" placeholder="Travellers" type="number" required>
+
+        <select class="form-control mb-2" name="taxi_type" required>
+            <option value="">Select Taxi Type</option>
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+            <option value="Mini">Mini</option>
+            <option value="Luxury">Luxury</option>
+        </select>
+
+        <select class="form-control mb-2" name="room_type" required>
+            <option value="">Select Room Type</option>
+            <option value="Standard">Standard</option>
+            <option value="Deluxe">Deluxe</option>
+            <option value="Suite">Suite</option>
+            <option value="Family">Family</option>
+        </select>
+
+        <select class="form-control mb-2" name="hotel_type" required>
+            <option value="">Select Hotel Type</option>
+            <option value="3 Star">3 Star</option>
+            <option value="4 Star">4 Star</option>
+            <option value="5 Star">5 Star</option>
+            <option value="Resort">Resort</option>
+        </select>
+
+        <input class="form-control mb-2" name="persons" placeholder="Number of Persons" type="number" min="1" required>
+
+        <button class="btn btn-primary">Confirm Booking</button>
+    </form>
+</div>
+{% endblock %}

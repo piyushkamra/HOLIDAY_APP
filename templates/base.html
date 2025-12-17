@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Holiday Booking</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="fancy-header">
+    <div class="fancy-header-bg"></div>
+    <div class="fancy-header-content container">
+        <div>
+            <div class="fancy-header-title">
+                <span style="font-size:2.3rem;font-weight:700;letter-spacing:0.5px;color:#fff;">
+                    <span style="margin-right:10px;">🏖️</span>Fly Point Travels
+                </span>
+            </div>
+            <div class="fancy-header-tagline" style="color:#fff;font-size:1.15rem;margin-top:6px;">
+                Explore daily destinations
+            </div>
+        </div>
+        <nav class="fancy-header-nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/packages">Holidays</a></li>
+                <li><a href="#">Flights</a></li>
+                <li><a href="#">Hotels</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="container my-4">
+{% block content %}{% endblock %}
+</div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
