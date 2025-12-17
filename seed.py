@@ -32,6 +32,8 @@ with app.app_context():
     flights = [
         Flight(city_id=goa.id, source_station='New Delhi', destination_station='Goa', price=6500,
                details='19:40 - 22:15 | 6E-2603 | Cabin: 7kg | Check-in: 15kg'),
+        Flight(city_id=goa.id, source_station='Goa', destination_station='New Delhi', price=6500,
+               details='09:00 - 11:30 | 6E-2604 | Cabin: 7kg | Check-in: 15kg'),
         Flight(city_id=goa.id, source_station='Cochin', destination_station='Goa', price=6000,
                details='08:00 - 10:30 | 6E-1234 | Cabin: 7kg | Check-in: 15kg'),
         Flight(city_id=goa.id, source_station='Goa', destination_station='Cochin', price=6000,
@@ -42,11 +44,11 @@ with app.app_context():
 
     # Seed Hotels for Goa
     hotels = [
-        Hotel(city_id=goa.id, name='Radisson Goa Candolim - Holidays Selections', price=18000,
+        Hotel(city_id=goa.id, name='Radisson Goa Candolim - Holidays Selections', price=5000,
               details='Executive Room | Breakfast included | Free stay for kid'),
-        Hotel(city_id=goa.id, name='Taj Exotica Resort & Spa', price=22000,
+        Hotel(city_id=goa.id, name='Taj Exotica Resort & Spa', price=8000,
               details='Luxury Room | Breakfast & Dinner | Sea View'),
-        Hotel(city_id=goa.id, name='Holiday Inn Resort Goa', price=16000,
+        Hotel(city_id=goa.id, name='Holiday Inn Resort Goa', price=6000,
               details='Deluxe Room | Breakfast included | Pool Access')
     ]
     db.session.bulk_save_objects(hotels)

@@ -195,6 +195,7 @@ def package_detail(id):
     else:
         initial_total_price = package.price
         hotel_names = ["No Hotel"] * (num_days-1)
+    print("DEBUG: item_prices =", item_prices)
     return render_template('package_detail.html', package=package, departure=departure, day_labels=day_labels, initial_total_price=initial_total_price, from_city=from_city, item_prices=item_prices, hotel_names=hotel_names, num_days=num_days)
 
 
