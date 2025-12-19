@@ -494,6 +494,10 @@ def debug_dbpath():
     abs_path = os.path.abspath(db_path)
     return f"Flask is using database file: {abs_path}"
 
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
 @app.route('/debug/tables')
 def debug_tables():
     # List all table names
