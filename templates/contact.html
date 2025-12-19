@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Contact Us</h2>
+  <div class="card p-4">
+    <h4>Our Office</h4>
+    <p>Holiday App Pvt Ltd<br>
+       123 Dummy Street,<br>
+       Near Famous Landmark,<br>
+       Panaji, Goa 403001, India</p>
+    <h4>Google Map Location</h4>
+    <div style="width: 100%; height: 300px;">
+      <iframe
+        width="100%"
+        height="300"
+        frameborder="0" style="border:0"
+        src="https://www.google.com/maps?q=15.4989,73.8281&z=15&output=embed"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <h4>Phone Numbers</h4>
+    <ul>
+      <li>+91-9876543210</li>
+      <li>+91-9123456789</li>
+    </ul>
+    <h4>Email IDs</h4>
+    <ul>
+      <li>info@holidayapp.com</li>
+      <li>support@holidayapp.com</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
