@@ -42,26 +42,28 @@ with app.app_context():
     db.session.bulk_save_objects(flights)
     db.session.commit()
 
+    # Remove all existing hotels for Goa before seeding
+    Hotel.query.filter_by(city_id=goa.id).delete()
+    db.session.commit()
     # Seed Hotels for Goa
     hotels = [
-        Hotel(city_id=goa.id, name='Radisson Goa Candolim - Holidays Selections', price=5000,
-              details='Executive Room | Breakfast included | Free stay for kid'),
-        Hotel(city_id=goa.id, name='Taj Exotica Resort & Spa', price=8000,
-              details='Luxury Room | Breakfast & Dinner | Sea View'),
-        Hotel(city_id=goa.id, name='Holiday Inn Resort Goa', price=6000,
-              details='Deluxe Room | Breakfast included | Pool Access')
+        Hotel(city_id=goa.id, name='Calux Joia Do Mar Resort', address='Calangute - Arpora Rd, Porba Vaddo, Prabhu wada, Calangute, Goa 403516', room_category='DELUXE ROOM', price=3500, meal='WITH BREAKFAST', details=''),
+        Hotel(city_id=goa.id, name='Amara Grand Baga', address='Survey No 233, E & D, Calangute - Baga Rd, Baga, Calangute, Goa 403516', room_category='PREMIUM ROOM', price=4500, meal='WITH BREAKFAST', details='')
     ]
     db.session.bulk_save_objects(hotels)
     db.session.commit()
 
-    # Seed Activities for Goa
+    # Remove any old "Free Airport Transfers" activity for Goa
+    Activity.query.filter_by(city_id=goa.id, name='Free Airport Transfers').delete()
+    db.session.commit()
+    # Seed Activities for Goa with rates for 1-4 pax
     activities = [
-        Activity(city_id=goa.id, name='Free Airport Transfers', price=0,
-                 details='Enjoy free transfers in a comfortable private vehicle from the Airport to the hotel.'),
-        Activity(city_id=goa.id, name='Water Sports at Baga Beach', price=2000,
-                 details='Enjoy parasailing, jet ski, and banana boat rides at Baga Beach.'),
-        Activity(city_id=goa.id, name='Sunset Cruise on Mandovi River', price=1200,
-                 details='Enjoy a scenic sunset cruise with music and dance on the Mandovi River.')
+        Activity(city_id=goa.id, name='AIRPORT PICK UP', type='pickup', rate_1=2000, rate_2=1000, rate_3=700, rate_4=600, price=2000, details='Airport pickup from Dabolim Airport to hotel'),
+        Activity(city_id=goa.id, name='AIRPORT DROP', type='drop', rate_1=2000, rate_2=1000, rate_3=700, rate_4=600, price=2000, details='Airport drop from hotel to Dabolim Airport'),
+        Activity(city_id=goa.id, name='NORTH GOA TOUR SIC', type='tour', rate_1=500, rate_2=500, rate_3=500, rate_4=500, price=500, details='North Goa sightseeing tour (SIC)'),
+        Activity(city_id=goa.id, name='SOUTH GOA TOUR SIC', type='tour', rate_1=600, rate_2=600, rate_3=600, rate_4=600, price=600, details='South Goa sightseeing tour (SIC)'),
+        Activity(city_id=goa.id, name='BOAT CRUISE RIDE', type='activity', rate_1=400, rate_2=400, rate_3=400, rate_4=400, price=400, details='Boat cruise ride on Mandovi River'),
+        Activity(city_id=goa.id, name='SCUBA DIVING+WATERSPORTS', type='activity', rate_1=2000, rate_2=2000, rate_3=2000, rate_4=2000, price=2000, details='Scuba diving and watersports package')
     ]
     db.session.bulk_save_objects(activities)
     db.session.commit()

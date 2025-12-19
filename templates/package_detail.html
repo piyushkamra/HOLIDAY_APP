@@ -30,23 +30,71 @@
                 <span style="margin-left:auto;color:#0077ff;font-size:1.08rem;">Included: ✈️ 1 Flight, 🏨 1 Hotel, 🏄‍♂️ 1 Activity</span>
             </div>
             <!-- Flight Card -->
-            {% if item_prices['flight-day' ~ (i+1)] > 0 %}
-            <div id="flight-card-day{{i+1}}" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">
-                <div style="display:flex;align-items:center;gap:12px;">
-                    <span style="font-size:1.15rem;font-weight:600;">✈️ FLIGHT</span>
-                    <span id="flight-name-day{{i+1}}" style="color:#444;">
-                        {% if i == 0 %}
-                            {{ from_city }} to {{ package.destination }} - Dabolim Airport
-                        {% elif i == num_days-1 %}
-                            {{ package.destination }} to {{ from_city }} - Dabolim Airport
-                        {% endif %}
-                    </span>
-                    <span id="flight-price-day{{i+1}}" style="margin-left:auto;color:#0077ff;font-weight:600;">₹{{ item_prices['flight-day' ~ (i+1)] }}</span>
-                    <button style="margin-left:12px;background:none;border:none;color:#ff4d4f;font-weight:600;cursor:pointer;" onclick="removeItem('flight-day{{i+1}}')">REMOVE</button>
+            {% if flight_option != "without" %}
+                {% if ('flight-day' ~ (i+1)) in item_prices and item_prices['flight-day' ~ (i+1)] > 0 %}
+                <div id="flight-card-day{{i+1}}" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span style="font-size:1.15rem;font-weight:600;">✈️ FLIGHT</span>
+                        <span id="flight-name-day{{i+1}}" style="color:#444;">
+                            {% if i == 0 %}
+                                {{ from_city }} to {{ package.destination }} - Dabolim Airport
+                            {% elif i == num_days-1 %}
+                                {{ package.destination }} to {{ from_city }} - Dabolim Airport
+                            {% endif %}
+                        </span>
+                        <span id="flight-price-day{{i+1}}" style="margin-left:auto;color:#0077ff;font-weight:600;">₹{{ item_prices['flight-day' ~ (i+1)] }}</span>
+                        <button style="margin-left:12px;background:none;border:none;color:#ff4d4f;font-weight:600;cursor:pointer;" onclick="removeItem('flight-day{{i+1}}')">REMOVE</button>
+                    </div>
+                    <div style="margin-top:8px;color:#888;">Flight details for day {{i+1}}</div>
                 </div>
-                <div style="margin-top:8px;color:#888;">Flight details for day {{i+1}}</div>
-            </div>
+                {% endif %}
             {% endif %}
+
+            <!-- Activity & Transfer Cards (loop through all activities for the day) -->
+            {% for act in activity_details[i] %}
+                {% if act.name == "AIRPORT PICK UP" %}
+                <div id="activity-card-day{{i+1}}" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span style="font-size:1.15rem;font-weight:600;">🚕 {{ act.name }}</span>
+                        <span style="margin-left:auto;color:#0077ff;font-weight:600;">
+                            ₹{{ (act.rate_1 if persons == 1 else act.rate_2 if persons == 2 else act.rate_3 if persons == 3 else act.rate_4 if persons == 4 else act.price|default(0)) * persons }}
+                        </span>
+                        <button style="margin-left:12px;background:none;border:none;color:#ff4d4f;font-weight:600;cursor:pointer;" onclick="removeItem('activity-day{{i+1}}')">REMOVE</button>
+                    </div>
+                    <div style="margin-top:8px;color:#888;">{{ act.details }}</div>
+                </div>
+                <div id="add-activity-day{{i+1}}" style="display:none;text-align:right;margin-bottom:18px;">
+                    <button style="background:#0077ff;color:#fff;padding:8px 18px;border:none;border-radius:8px;font-weight:600;cursor:pointer;" onclick="addItem('activity-day{{i+1}}')">UNDO</button>
+                </div>
+                {% elif act.name == "AIRPORT DROP" %}
+                <div id="activity-card-day{{i+1}}" style="border-left:4px solid #00b894;padding-left:18px;margin-bottom:18px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span style="font-size:1.15rem;font-weight:600;">🚕 {{ act.name }}</span>
+                        <span style="margin-left:auto;color:#00b894;font-weight:600;">
+                            ₹{{ (act.rate_1 if persons == 1 else act.rate_2 if persons == 2 else act.rate_3 if persons == 3 else act.rate_4 if persons == 4 else act.price) * persons }}
+                        </span>
+                        <button style="margin-left:12px;background:none;border:none;color:#ff4d4f;font-weight:600;cursor:pointer;" onclick="removeItem('activity-day{{i+1}}')">REMOVE</button>
+                    </div>
+                    <div style="margin-top:8px;color:#888;">{{ act.details }}</div>
+                </div>
+                <div id="add-activity-day{{i+1}}" style="display:none;text-align:right;margin-bottom:18px;">
+                    <button style="background:#0077ff;color:#fff;padding:8px 18px;border:none;border-radius:8px;font-weight:600;cursor:pointer;" onclick="addItem('activity-day{{i+1}}')">UNDO</button>
+                </div>
+                {% elif act.name and act.name not in ["AIRPORT PICK UP", "AIRPORT DROP"] %}
+                <div id="activity-card-day{{i+1}}" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span style="font-size:1.15rem;font-weight:600;">🏄‍♂️ ACTIVITY</span>
+                        <span id="activity-name-day{{i+1}}" style="color:#444;">{{ act.name }}</span>
+                        <span id="activity-type-day{{i+1}}" style="color:#888;">({{ act.type }})</span>
+                        <span id="activity-price-day{{i+1}}" style="margin-left:auto;color:#0077ff;font-weight:600;">
+                            ₹{{ (act.rate_1 if persons == 1 else act.rate_2 if persons == 2 else act.rate_3 if persons == 3 else act.rate_4 if persons == 4 else act.price) * persons }}
+                        </span>
+                        <button style="margin-left:12px;background:none;border:none;color:#ff4d4f;font-weight:600;cursor:pointer;" onclick="removeItem('activity-day{{i+1}}')">REMOVE</button>
+                    </div>
+                    <div style="margin-top:8px;color:#888;">{{ act.details }}</div>
+                </div>
+                {% endif %}
+            {% endfor %}
             <div id="add-flight-day{{i+1}}" style="display:none;text-align:right;margin-bottom:18px;">
                 <button style="background:#0077ff;color:#fff;padding:8px 18px;border:none;border-radius:8px;font-weight:600;cursor:pointer;" onclick="addItem('flight-day{{i+1}}')">UNDO</button>
             </div>
@@ -54,13 +102,15 @@
             {% if i < num_days-1 %}
             <div id="hotel-card-day{{i+1}}" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">
                 <div style="display:flex;align-items:center;gap:12px;">
-                    <span style="font-size:1.15rem;font-weight:600;">🏨 RESORT</span>
-                    <span id="hotel-name-day{{i+1}}" style="color:#444;">{{ hotel_names[i] }}</span>
-                    <span id="hotel-price-day{{i+1}}" style="margin-left:auto;color:#0077ff;font-weight:600;">₹{{ item_prices['hotel-day' ~ (i+1)] }}</span>
+                    <span style="font-size:1.15rem;font-weight:600;">🏨 {{ hotel_details[i].room_category }}</span>
+                    <span id="hotel-name-day{{i+1}}" style="color:#444;">{{ hotel_details[i].name }}</span>
+                    <span id="hotel-price-day{{i+1}}" style="margin-left:auto;color:#0077ff;font-weight:600;">₹{{ hotel_details[i].price }}</span>
                     <button style="margin-left:12px;background:none;border:none;color:#ff4d4f;font-weight:600;cursor:pointer;" onclick="removeItem('hotel-day{{i+1}}')">REMOVE</button>
                     <button style="margin-left:6px;background:none;border:none;color:#0077ff;font-weight:600;cursor:pointer;" onclick="showChangeHotel('day{{i+1}}')">CHANGE</button>
                 </div>
-                <div style="margin-top:8px;color:#888;">Executive Room | Breakfast included | Free stay for kid</div>
+                <div style="margin-top:8px;color:#888;">
+                    {{ hotel_details[i].room_category }} | {{ hotel_details[i].meal }}
+                </div>
             </div>
             <div id="add-hotel-day{{i+1}}" style="display:none;text-align:right;margin-bottom:18px;">
                 <button style="background:#0077ff;color:#fff;padding:8px 18px;border:none;border-radius:8px;font-weight:600;cursor:pointer;" onclick="addItem('hotel-day{{i+1}}')">UNDO</button>
@@ -69,23 +119,11 @@
             <div id="change-hotel-modal-day{{i+1}}" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.18);z-index:1000;align-items:center;justify-content:center;">
                 <div style="background:#fff;padding:32px;border-radius:16px;max-width:400px;margin:auto;box-shadow:0 4px 24px rgba(44,62,80,0.18);">
                     <h4 style="margin-bottom:18px;">Choose a Hotel</h4>
-                    <button style="width:100%;margin-bottom:12px;background:#eaf4ff;color:#0077ff;padding:10px;border:none;border-radius:8px;font-weight:600;cursor:pointer;" onclick="changeHotel('day{{i+1}}','Radisson Goa Candolim - Holidays Selections')">Radisson Goa Candolim - Holidays Selections</button>
-                    <button style="width:100%;margin-bottom:12px;background:#eaf4ff;color:#0077ff;padding:10px;border:none;border-radius:8px;font-weight:600;cursor:pointer;" onclick="changeHotel('day{{i+1}}','Taj Exotica Resort & Spa')">Taj Exotica Resort & Spa</button>
-                    <button style="width:100%;margin-bottom:12px;background:#eaf4ff;color:#0077ff;padding:10px;border:none;border-radius:8px;font-weight:600;cursor:pointer;" onclick="changeHotel('day{{i+1}}','Holiday Inn Resort Goa')">Holiday Inn Resort Goa</button>
+                    <div id="hotel-list-day{{i+1}}"></div>
                     <button style="width:100%;background:#ff4d4f;color:#fff;padding:10px;border:none;border-radius:8px;font-weight:600;cursor:pointer;" onclick="closeChangeHotel('day{{i+1}}')">Cancel</button>
                 </div>
             </div>
             {% endif %}
-            <!-- Activity Card -->
-            <div id="activity-card-day{{i+1}}" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">
-                <div style="display:flex;align-items:center;gap:12px;">
-                    <span style="font-size:1.15rem;font-weight:600;">🏄‍♂️ ACTIVITY</span>
-                    <span id="activity-name-day{{i+1}}" style="color:#444;">Activity for day {{i+1}}</span>
-                    <span id="activity-price-day{{i+1}}" style="margin-left:auto;color:#0077ff;font-weight:600;">₹{{ item_prices['activity-day' ~ (i+1)] }}</span>
-                    <button style="margin-left:12px;background:none;border:none;color:#ff4d4f;font-weight:600;cursor:pointer;" onclick="removeItem('activity-day{{i+1}}')">REMOVE</button>
-                </div>
-                <div style="margin-top:8px;color:#888;">Activity details for day {{i+1}}</div>
-            </div>
             <div id="add-activity-day{{i+1}}" style="display:none;text-align:right;margin-bottom:18px;">
                 <button style="background:#0077ff;color:#fff;padding:8px 18px;border:none;border-radius:8px;font-weight:600;cursor:pointer;" onclick="addItem('activity-day{{i+1}}')">UNDO</button>
             </div>
@@ -113,10 +151,10 @@
 <h4 id="total-price">Total Price: ₹{{ "{:,}".format(initial_total_price) }}</h4>
 <a href="/book/{{ package.id }}" class="btn btn-success">Book Now</a>
 <script>
-let totalPrice = {{ initial_total_price }};
-let initialTotalPrice = {{ initial_total_price }};
+var totalPrice = Number('{{ initial_total_price }}');
+var initialTotalPrice = Number('{{ initial_total_price }}');
 const itemPrices = {{ item_prices | tojson | safe }};
-let itemVisible = {};
+var itemVisible = {};
 for (const key in itemPrices) {
     itemVisible[key] = true;
 }
@@ -151,6 +189,24 @@ function addItem(item) {
 }
 function showChangeHotel(day) {
     document.getElementById('change-hotel-modal-' + day).style.display = 'flex';
+    // Fetch hotel names for the city
+    fetch(`/api/hotels?city={{ package.destination }}`)
+        .then(response => response.json())
+        .then(data => {
+            const hotelListDiv = document.getElementById('hotel-list-' + day);
+            hotelListDiv.innerHTML = '';
+            if (data.hotels && data.hotels.length > 0) {
+                data.hotels.forEach(hotelName => {
+                    const btn = document.createElement('button');
+                    btn.style = "width:100%;margin-bottom:12px;background:#eaf4ff;color:#0077ff;padding:10px;border:none;border-radius:8px;font-weight:600;cursor:pointer;";
+                    btn.textContent = hotelName;
+                    btn.onclick = function() { changeHotel(day, hotelName); };
+                    hotelListDiv.appendChild(btn);
+                });
+            } else {
+                hotelListDiv.innerHTML = '<div style="color:#888;">No hotels found for this city.</div>';
+            }
+        });
 }
 
 // Add New Item Modal Logic
@@ -177,42 +233,39 @@ document.getElementById('add-new-submit').onclick = function() {
     const dayId = addNewDay;
     let cardHtml = '';
     if (addNewType === 'flight') {
-        cardHtml = `
-        <div class="card itinerary-card flight-card" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">
-            <div class="card-header">✈️ FLIGHT</div>
-            <div class="card-body">
-                <h5 class="card-title">${name}</h5>
-                <p class="card-text">₹${price}</p>
-                <p class="card-text">${desc}</p>
-                <button class="btn btn-danger remove-btn" onclick="this.closest('.card').remove(); window.updateTotalPrice(-${price});">REMOVE</button>
-            </div>
-        </div>`;
+        cardHtml = '<div class="card itinerary-card flight-card" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">' +
+            '<div class="card-header">✈️ FLIGHT</div>' +
+            '<div class="card-body">' +
+                '<h5 class="card-title">' + name + '</h5>' +
+                '<p class="card-text">₹' + price + '</p>' +
+                '<p class="card-text">' + desc + '</p>' +
+                '<button class="btn btn-danger remove-btn" onclick="this.closest(\'card\').remove(); window.updateTotalPrice(-' + price + ');">REMOVE</button>' +
+            '</div>' +
+        '</div>';
         document.getElementById('add-flight-day' + dayId).insertAdjacentHTML('beforebegin', cardHtml);
         window.updateTotalPrice(price);
     } else if (addNewType === 'hotel') {
-        cardHtml = `
-        <div class="card itinerary-card hotel-card" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">
-            <div class="card-header">🏨 HOTEL</div>
-            <div class="card-body">
-                <h5 class="card-title">${name}</h5>
-                <p class="card-text">₹${price}</p>
-                <p class="card-text">${desc}</p>
-                <button class="btn btn-danger remove-btn" onclick="this.closest('.card').remove(); window.updateTotalPrice(-${price});">REMOVE</button>
-            </div>
-        </div>`;
+        cardHtml = '<div class="card itinerary-card hotel-card" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">' +
+            '<div class="card-header">🏨 HOTEL</div>' +
+            '<div class="card-body">' +
+                '<h5 class="card-title">' + name + '</h5>' +
+                '<p class="card-text">₹' + price + '</p>' +
+                '<p class="card-text">' + desc + '</p>' +
+                '<button class="btn btn-danger remove-btn" onclick="this.closest(\'card\').remove(); window.updateTotalPrice(-' + price + ');">REMOVE</button>' +
+            '</div>' +
+        '</div>';
         document.getElementById('add-hotel-day' + dayId).insertAdjacentHTML('beforebegin', cardHtml);
         window.updateTotalPrice(price);
     } else if (addNewType === 'activity') {
-        cardHtml = `
-        <div class="card itinerary-card activity-card" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">
-            <div class="card-header">🏄‍♂️ ACTIVITY</div>
-            <div class="card-body">
-                <h5 class="card-title">${name}</h5>
-                <p class="card-text">₹${price}</p>
-                <p class="card-text">${desc}</p>
-                <button class="btn btn-danger remove-btn" onclick="this.closest('.card').remove(); window.updateTotalPrice(-${price});">REMOVE</button>
-            </div>
-        </div>`;
+        cardHtml = '<div class="card itinerary-card activity-card" style="border-left:4px solid #0077ff;padding-left:18px;margin-bottom:18px;">' +
+            '<div class="card-header">🏄‍♂️ ACTIVITY</div>' +
+            '<div class="card-body">' +
+                '<h5 class="card-title">' + name + '</h5>' +
+                '<p class="card-text">₹' + price + '</p>' +
+                '<p class="card-text">' + desc + '</p>' +
+                '<button class="btn btn-danger remove-btn" onclick="this.closest(\'card\').remove(); window.updateTotalPrice(-' + price + ');">REMOVE</button>' +
+            '</div>' +
+        '</div>';
         document.getElementById('add-activity-day' + dayId).insertAdjacentHTML('beforebegin', cardHtml);
         window.updateTotalPrice(price);
     }

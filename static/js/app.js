@@ -12,7 +12,15 @@ const topCities = [
     "Meerut", "Rajkot", "Varanasi", "Srinagar", "Amritsar", "Ranchi", "Guwahati", "Chandigarh"
 ];
 
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        // Ensure persons input is updated before form submission
+        const searchForm = document.querySelector(".search-form");
+        if (searchForm) {
+            searchForm.addEventListener("submit", function (e) {
+                let totalGuests = rooms.reduce((sum, room) => sum + room.adults + room.children, 0);
+                document.getElementById("persons").value = totalGuests;
+            });
+        }
     // --- City Dropdown ---
     const fromCityInput = document.getElementById("from_city");
     const cityDropdown = document.getElementById("city-dropdown");
@@ -83,6 +91,9 @@ document.addEventListener("DOMContentLoaded", function () {
             return `${adults}${children}`;
         }).join(" | ");
         guestsInput.value = `${rooms.length} Room${rooms.length > 1 ? "s" : ""}: ${summary}`;
+        // Update hidden persons input with total guests (adults + children)
+        let totalGuests = rooms.reduce((sum, room) => sum + room.adults + room.children, 0);
+        document.getElementById("persons").value = totalGuests;
         guestsDropdown.style.display = "none";
     });
 
